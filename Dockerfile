@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-# From cuda 10.0 / cudnn 7
+# From cuda 9.0 / cudnn 7
 FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 
 # Labels
@@ -36,9 +36,9 @@ RUN apt-get update -q && \
         procps \
         subversion \
         wget \
-        unzip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+        && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV PATH /opt/conda/bin:$PATH
 
@@ -75,6 +75,17 @@ RUN set -x && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda clean -afy
 
+# Add DAIN tools
+RUN apt-get update -q && \
+    apt-get install -qy \
+        ffmpeg \
+        imagemagick \
+        unzip \
+        zip \
+        && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Fetch DAIN
 
 RUN git clone https://github.com/JamesPerlman/DAIN.git ${DAIN_PATH} && \
@@ -103,3 +114,7 @@ RUN mkdir ${DAIN_PATH}/MiddleBurySet && \
     wget http://vision.middlebury.edu/flow/data/comp/zip/other-gt-interp.zip && \
     unzip other-gt-interp.zip && \
     rm other-gt-interp.zip
+
+# cd into DAIN_PATH and activate conda environment on login
+WORKDIR ${DAIN_PATH}
+RUN echo "source activate pytorch1.0.0" > ~/.bashrc
