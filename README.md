@@ -24,8 +24,8 @@ or
 
 `-o, --out` - Output folder path
 
-`--slow` - Slow motion multiplier. `--slow 8` means output video should be 8x slower than input, i.e. create 7 interpolated output frames between each input frame pair. (default = 8)
+`--slow` - Slow motion multiplier. `--slow 8` means DAIN will create 7 interpolated output frames between each input frame pair, and the output fps will be 8x higher unless the `--fps` option is used. (default = 8)
 
 `--loop` - Turn this on if you want the video to be able to loop seamlessly. (set to 1 or 0. default = 0)
 
-`--fps` - Use this if you want to reinterpret the output footage at a specific framerate.  By default, the output framerate will be the input framerate multiplied by the slow motion multiplier, aka the output's duration will be identical to the input's duration. (default = 0)
+`--fps` - Use this if you want to reinterpret the output footage at a specific framerate.  If your input video is 1 second in duration and has a framerate of 30fps and you use `--slow 8` then the output video will also have a duration of 1 second, but with a framerate of 240fps.  If you also specify `--fps 30` then your output video will be 8 seconds long with a framerate of 30fps. (default = 0)
